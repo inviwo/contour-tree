@@ -99,7 +99,7 @@ void ContourTree::computeCT() {
     }
 }
 
-void ContourTree::output(std::string fileName) {
+void ContourTree::output() {
     std::cout << "removing deg-2 nodes and computing segmentation" << std::endl;
 
     // saving some memory
@@ -110,12 +110,12 @@ void ContourTree::output(std::string fileName) {
 
     std::vector<int64_t> nodeids;
     std::vector<scalar_t> nodefns;
-    std::vector<char> nodeTypes;
+    std::vector<char> nodetypes;
     std::vector<int64_t> arcs;
 
     arcMap.resize(nv, -1);
 
-    uint32_t arcNo = 0;
+    arcNo = 0;
     for(int64_t i = 0;i < nv;i ++) {
         // go in sorted order
         int64_t v = tree->sv[i];
@@ -125,7 +125,7 @@ void ContourTree::output(std::string fileName) {
         }
         nodeids.push_back(v);
         nodefns.push_back(tree->data->getFunctionValue(v));
-        nodeTypes.push_back(tree->criticalPts[v]);
+        nodetypes.push_back(tree->criticalPts[v]);
 
         // create an arc for which this critical point is the source of the arc
         // traverse up for each of its arcs
@@ -147,11 +147,19 @@ void ContourTree::output(std::string fileName) {
         }
     }
 
+	nodeIDs = nodeids;
+    nodeFnVals = nodefns;
+    nodeTypes = nodetypes;
+    arcList = arcs;
+    vToArcMap = arcMap;
+}
+
+void ContourTree::writeToDisk(std::string fileName) {
     // write meta data
     std::cout << "Writing meta data" << std::endl;
     {
         std::ofstream pr(fileName + ".rg.dat");
-        pr << nodeids.size() << "\n";
+        pr << nodeIDs.size() << "\n";
         pr << arcNo << "\n";
         pr.close();
     }
@@ -159,17 +167,19 @@ void ContourTree::output(std::string fileName) {
     std::cout << "writing tree output" << std::endl;
     std::string rgFile = fileName + ".rg.bin";
     std::ofstream of(rgFile,std::ios::binary);
-    of.write((char *)nodeids.data(),nodeids.size() * sizeof(int64_t));
-    of.write((char *)nodefns.data(),nodeids.size() * sizeof(scalar_t));
-    of.write((char *)nodeTypes.data(),nodeids.size());
-    of.write((char *)arcs.data(),arcs.size() * sizeof(int64_t));
+    of.write((char *)nodeIDs.data(),nodeIDs.size() * sizeof(int64_t));
+    of.write((char *)nodeFnVals.data(),nodeIDs.size() * sizeof(scalar_t));
+    of.write((char *)nodeTypes.data(),nodeIDs.size());
+    of.write((char *)arcList.data(),arcList.size() * sizeof(int64_t));
     of.close();
 
     std::cout << "writing partition" << std::endl;
     std::string rawFile = fileName + ".part.raw";
     of.open(rawFile, std::ios::binary);
     of.write((char *)arcMap.data(), arcMap.size() * sizeof(uint32_t));
+	//of.write((char *)vToArcMap.data(), arcMap.size() * sizeof(uint32_t));
     of.close();
+     
 }
 
 void ContourTree::remove(int64_t xi, std::vector<ContourTree::Node> &nodeArray) {

@@ -3,13 +3,13 @@
 
 #include <string>
 #include <vector>
+#include "ScalarFunction.hpp"
 
 namespace contourtree {
 
 class MergeTree;
 
-class ContourTree
-{
+class ContourTree {
 public:
     struct Node {
         int64_t v;
@@ -20,26 +20,37 @@ public:
 public:
     ContourTree();
 
-    void setup(const MergeTree * tree);
+    void setup(const MergeTree *tree);
     void computeCT();
-    void output(std::string fileName);
+    void output();
+    void writeToDisk(std::string fileName);
 
 private:
-    void remove(int64_t xi, std::vector<Node>& nodeArray);
+    void remove(int64_t xi, std::vector<Node> &nodeArray);
     void removeAndAdd(std::vector<int64_t> &arr, int64_t rem, int64_t add);
     void remove(std::vector<int64_t> &arr, int64_t xi);
     void addArc(int64_t from, int64_t to);
 
+	
+
 public:
-    const MergeTree * tree;
+    const MergeTree *tree;
     std::vector<Node> nodesJoin;
     std::vector<Node> nodesSplit;
     std::vector<Node> ctNodes;
     std::vector<uint32_t> arcMap;
 
+    std::vector<int64_t> nodeIDs;
+    std::vector<scalar_t> nodeFnVals;
+    std::vector<char> nodeTypes;
+    std::vector<int64_t> arcList;
+    std::vector<uint32_t> vToArcMap;
+
+	uint32_t arcNo;
+
     int64_t nv;
 };
 
-}
+}  // namespace contourtree
 
-#endif // CONTOURTREE_HPP
+#endif  // CONTOURTREE_HPP

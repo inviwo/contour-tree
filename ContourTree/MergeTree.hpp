@@ -29,7 +29,8 @@ public:
     void computeTree(ScalarFunction* data, TreeType type);
     void computeJoinTree();
     void computeSplitTree();
-    void output(std::string fileName, TreeType tree);
+    void output(TreeType tree);
+    void writeToDisk(std::string fileName);
 
 protected:
     void setupData();
@@ -53,6 +54,15 @@ public:
 
     std::set<int64_t> set;
     ContourTree ctree;
+
+	uint32_t noArcs;
+    uint32_t noNodes;
+
+	std::vector<int64_t> nodeIDs;
+    std::vector<scalar_t> nodeFnVals;
+    std::vector<char> nodeTypes;
+    std::vector<int64_t> arcList;
+    std::vector<uint32_t> vToArcMap;
 
 private:
     std::vector<int64_t> star;
