@@ -10,26 +10,17 @@ namespace contourtree {
 
 TopologicalFeatures::TopologicalFeatures() { }
 
-void TopologicalFeatures::loadData(std::string dataLocation, bool partition) {
-    ctdata = ContourTreeData();
-    ctdata.loadBinFile(dataLocation);
+void TopologicalFeatures::loadData(ContourTreeData inputData, std::vector<uint32_t> inputOrder, std::vector<float> inputWts, bool partition) {
+  
+	
 
-    // read order file
-    // read meta data
-    std::ifstream ip(dataLocation + ".order.dat");
-    int64_t orderSize;
-    ip >> orderSize;
-    ip.close();
+    order.resize(inputOrder.size());
+    wts.resize(inputWts.size());
 
-    order.resize(orderSize);
-    wts.resize(orderSize);
-
-    std::string binFile = dataLocation + ".order.bin";
-    std::ifstream bin(binFile, std::ios::binary);
-    bin.read((char *)order.data(),order.size() * sizeof(uint32_t));
-    bin.read((char *)wts.data(),wts.size() * sizeof(float));
-    bin.close();
-
+	ctdata = inputData; 
+	order = inputOrder;
+    wts = inputWts;
+   
     if(partition) {
         sim.setInput(&ctdata);
         sim.simplify(order,1,0,wts);

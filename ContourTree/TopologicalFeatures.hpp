@@ -17,7 +17,8 @@ class TopologicalFeatures
 public:
     TopologicalFeatures();
 
-    void loadData(std::string dataLocation, bool partition = false);
+    void loadData(ContourTreeData ctdata, std::vector<uint32_t> inputOrder,
+                  std::vector<float> inputWts, bool partition);
     std::vector<Feature> getArcFeatures(int topk = -1, float th = 0);
     std::vector<Feature> getPartitionedExtremaFeatures(int topk = -1, float th = 0);
 

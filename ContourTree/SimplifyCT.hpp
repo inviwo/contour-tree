@@ -30,7 +30,8 @@ public:
     void setInput(ContourTreeData *data);
     void simplify(SimFunction *simFn);
     void simplify(const std::vector<uint32_t> &order, int topk = -1, float th = 0, const std::vector<float> &wts = std::vector<float>());
-    void outputOrder(std::string fileName);
+    void outputOrder();
+    void writeToDisk(std::string fileName);
 
 protected:
     void initSimplification(SimFunction *f);
@@ -57,6 +58,7 @@ public:
     std::priority_queue<uint32_t,std::vector<uint32_t>,BranchCompare> queue;
     std::vector<uint32_t> order;
     std::vector<std::vector<uint32_t>> vArray;
+    std::vector<float> weights;
 };
 
 }
