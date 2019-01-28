@@ -151,8 +151,6 @@ void MergeTree::output(TreeType tree) {
     }
     noArcs = noNodes - 1;
 
-    
-
     std::cout << ("Creating required memory!") << std::endl;
     std::vector<int64_t> nodeids(noNodes);
     std::vector<scalar_t> nodefns(noNodes);
@@ -255,18 +253,17 @@ void MergeTree::output(TreeType tree) {
             arcMap[to] = arcMap[from] = arcNo++;
         }
         assert(arcNo == noArcs);
-    }  
+    }
 
-	//save in object
+    // save in object
     nodeIDs = nodeids;
     nodeFnVals = nodefns;
     nodeTypes = nodetypes;
     arcList = arcs;
     vToArcMap = arcMap;
-}
 
-void MergeTree::writeToDisk(std::string fileName)
-{
+}
+void MergeTree::writeToDisk(std::string fileName) {
     // write meta data
 
     std::cout << "Writing meta data" << std::endl;
@@ -290,7 +287,6 @@ void MergeTree::writeToDisk(std::string fileName)
     of.open(rawFile, std::ios::binary);
     of.write((char *)vToArcMap.data(), vToArcMap.size() * sizeof(uint32_t));
     of.close();
-
 }
 
 void MergeTree::processVertex(int64_t v) {
