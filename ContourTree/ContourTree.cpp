@@ -159,7 +159,7 @@ void ContourTree::writeToDisk(std::string fileName) {
     std::cout << "Writing meta data" << std::endl;
     {
         std::ofstream pr(fileName + ".rg.dat");
-        pr << nodeIDs.size() << "\n";
+        //pr << nodeIDs.size() << "\n"; FIX_ME
         pr << arcNo << "\n";
         pr.close();
     }
