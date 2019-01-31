@@ -24,6 +24,13 @@ HyperVolume::HyperVolume(const ContourTreeData &ctData, std::string partFile) {
     initVolumes(cols);
 }
 
+HyperVolume::HyperVolume(const ContourTreeData &ctData, std::vector<uint32_t> cols) {
+    fnVals = ctData.fnVals.data();
+    vol.resize(ctData.noArcs, 0);
+    brVol.resize(ctData.noArcs, 0);
+    initVolumes(cols);
+}
+
 void HyperVolume::initVolumes(const std::vector<uint32_t> &cols) {
     for(size_t i = 0;i < cols.size();i ++) {
         if(cols[i] == -1) {
